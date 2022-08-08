@@ -1,0 +1,157 @@
+definitions:
+  dto.LoginReq:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  dto.LoginRes:
+    properties:
+      jwt:
+        type: string
+    type: object
+  dto.RegisterUserReq:
+    properties:
+      address:
+        type: string
+      age:
+        type: integer
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+    type: object
+  dto.UserResponse:
+    properties:
+      age:
+        type: integer
+      email:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+    type: object
+  dto.UserUpdateReq:
+    properties:
+      Address:
+        type: string
+      age:
+        type: integer
+      name:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: do login
+      parameters:
+      - description: User credentials
+        in: body
+        name: Login
+        required: true
+        schema:
+          $ref: '#/definitions/dto.LoginReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.LoginRes'
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      description: Register a new user
+      parameters:
+      - description: User information
+        in: body
+        name: Register
+        required: true
+        schema:
+          $ref: '#/definitions/dto.RegisterUserReq'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+  /users:
+    get:
+      consumes:
+      - application/json
+      description: Get all users paginated
+      parameters:
+      - description: limit
+        in: query
+        name: limit
+        type: integer
+      - description: page
+        in: query
+        name: page
+        type: integer
+      - description: Authentication token
+        in: header
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dto.UserResponse'
+            type: array
+  /users/:id:
+    delete:
+      description: Delete user by id
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+    get:
+      description: Get user by id
+      parameters:
+      - description: User id
+        in: path
+        name: Id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.UserResponse'
+    put:
+      description: Delete user by id
+      parameters:
+      - description: Update request
+        in: body
+        name: Update
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UserUpdateReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+swagger: "2.0"
